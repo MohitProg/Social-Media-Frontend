@@ -25,12 +25,11 @@ import { AiOutlineHome } from "react-icons/ai";
 import { IoMdMenu, IoMdNotificationsOutline } from "react-icons/io";
 import MobileMenu from "./MobileMenu";
 import ProfileMenuDropDown from "./ProfileMenuDropDown";
-import { Apicall } from "../../constant";
+import { Apicall, Base_Url } from "../../constant";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const userId = new URLSearchParams(window.location.search).get("userid");
-
 
   // state for open mobile menu here
   const [openMobileMenu, setopenMobileMenu] = useState(false);
@@ -60,7 +59,6 @@ const Navbar = () => {
     }
   };
 
-
   // using debounce function here forexecution of infinite scroll
   const doMagic = useCallback((fun, del) => {
     let timer;
@@ -69,10 +67,8 @@ const Navbar = () => {
       timer = setTimeout(() => {
         fun(...args);
       }, del);
-
-     
     };
-  },[])
+  }, []);
 
   // doMagic(handleScroll,3000)
 
@@ -108,11 +104,10 @@ const Navbar = () => {
   }, [pagevalue]);
 
   // useffect for google authentication
-
   useEffect(() => {
     if (userId !== null) {
       try {
-        Apicall.post("http://localhost:8000/api/v1/user/send-token", {
+        Apicall.post(`${Base_Url}/api/v1/user/send-token`, {
           userId: userId,
         }).then((data) => {
           console.log(data);
@@ -124,6 +119,8 @@ const Navbar = () => {
       }
     }
   }, [userId]);
+
+  
 
   return (
     <>
@@ -160,17 +157,16 @@ const Navbar = () => {
             </div>
 
             <div className="  flex items-center justify-end gap-2">
+              <div className="relative   flex items-center ">
+                <ProfileMenuDropDown />
+              </div>
 
-            <div className="relative   flex items-center ">
-              <ProfileMenuDropDown />
-            </div>
-
-            <button
-              onClick={() => setopenMobileMenu(true)}
-              className="lg:hidden flex items-center bg-[#c0bcbccc] "
-            >
-              <IoMdMenu size={35} />
-            </button>
+              <button
+                onClick={() => setopenMobileMenu(true)}
+                className="lg:hidden flex items-center bg-[#c0bcbccc] "
+              >
+                <IoMdMenu size={35} />
+              </button>
             </div>
           </div>
         </nav>

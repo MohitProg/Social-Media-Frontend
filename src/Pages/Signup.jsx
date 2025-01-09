@@ -7,7 +7,7 @@ import { ClipLoader } from "react-spinners";
 import { Button } from "@/Components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { BiLogoFacebookSquare } from "react-icons/bi";
-
+import { Base_Url } from "../../constant";
 const Signup = () => {
   const dispatch = useDispatch();
   const Navigate = useNavigate();
@@ -37,11 +37,11 @@ const Signup = () => {
           toast.error(res.message);
         }
       });
-  };
+  };x``
 
   const handleGoogleLogin = async () => {
     try {
-      window.location.href = "http://localhost:8000/api/v1/user/auth/google";
+      window.location.href = `${Base_Url}/api/v1/user/auth/google`;
     } catch (error) {
       console.error("Login error: ", error);
     }

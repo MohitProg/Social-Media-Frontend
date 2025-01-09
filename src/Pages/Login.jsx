@@ -8,6 +8,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "@/Components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { BiLogoFacebookSquare } from "react-icons/bi";
+import { Base_Url } from "../../constant";
 const Login = () => {
   const dispatch = useDispatch();
   const Navigate = useNavigate();
@@ -40,7 +41,7 @@ const Login = () => {
   const handleGoogleLogin = async (e) => {
     e.preventDefault()
     try {
-      window.location.href = "http://localhost:8000/api/v1/user/auth/google";
+      window.location.href = `${Base_Url}/api/v1/user/auth/google`;
     } catch (error) {
       console.error("Login error: ", error);
     }

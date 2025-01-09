@@ -1,13 +1,12 @@
 import axios from "axios";
 const token = localStorage.getItem("auth-token");
-// const url="https://socialmediabackend-1.onrender.com/"
-const url="https://social-media-backend-mocha-seven.vercel.app"
+export const Base_Url = "https://socialmediabackend-1.onrender.com";
+// const url="https://social-media-backend-mocha-seven.vercel.app"
 export const Apicall = axios.create({
-  baseURL: `${url}/api/v1`,
-  headers:{
-    "Content-Type":"application/json"
-  }
-
+  baseURL: `${Base_Url}/api/v1`,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 Apicall.interceptors.request.use(
@@ -20,14 +19,7 @@ Apicall.interceptors.request.use(
   },
   (error) => {
     // Handle any errors
-    console.log(error)
+    console.log(error);
     return Promise.reject(error);
   }
 );
-
-
-
-
-
-
-
