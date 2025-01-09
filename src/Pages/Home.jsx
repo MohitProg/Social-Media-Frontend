@@ -21,6 +21,8 @@ const Home = () => {
     (state) => state.post
   );
 
+
+  console.log(allpoststatus)
   return (
     <>
       {/* <!-- Home Page Layout --> */}
@@ -38,25 +40,25 @@ const Home = () => {
 
             {/* <!-- Posts Feed --> */}
 
-            {Allpostdatatoviewuser && Allpostdatatoviewuser?.length > 0 ? (
-              <>
+            {allpoststatus === "pending" ? (
+              <div className="flex w-full  h-screen items-center  justify-center  ">
+                <ClipLoader />
+              </div>
+            ) : <>
                 <div className="flex flex-col gap-4">
-                  {Allpostdatatoviewuser?.map((value) => (
-                    <Newpost key={value?._id} value={value} />
-                  ))}
-
-                  {allpoststatus === "pending" && (
-                    <div className="flex w-full  h-screen items-center  justify-center  ">
-                      <ClipLoader />
-                    </div>
-                  )}
+                  {Allpostdatatoviewuser &&
+                    Allpostdatatoviewuser?.length > 0 &&
+                    Allpostdatatoviewuser?.map((value) => (
+                      <Newpost key={value?._id} value={value} />
+                    ))}
                 </div>
-              </>
-            ) : (
+              </> ? (
               <div className="flex flex-col gap-1 bg-white rounded-lg items-center justify-center h-screen w-full">
                 <h1 className="cmn-text">NO Post Available &#128532; </h1>
                 <p className="cmn-text text-sm">Please follow some user</p>
               </div>
+            ) : (
+              ""
             )}
           </div>
 
