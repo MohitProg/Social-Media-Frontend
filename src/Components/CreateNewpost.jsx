@@ -20,12 +20,14 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { UpdateAllpostdata } from "@/redux/Slice/PostSlice";
+import { CreateNotification } from "@/redux/Slice/NotificationApi";
 
 const CreateNewpost = () => {
   //  state for emoji showing
 
   const [showemoji, setshowEmoji] = useState(false);
-  console.log(showemoji)
+  console.log(showemoji);
   const pickerRef = useRef(null);
   const formref = useRef();
   const dispatch = useDispatch();
@@ -59,8 +61,17 @@ const CreateNewpost = () => {
         .then((res) => {
           if (res.success) {
             toast.success(res.message);
-            console.log(res);
+            console.log([res.userupdated]);
+
             dispatch(CreatePostNoupdate(res.userupdated));
+            dispatch(UpdateAllpostdata([res.CreatePost]));
+            // method to create notification
+            let obj = {
+              name: res?.userupdated?.name,
+              type: "post",
+              postid: res?.CreatePost?._id,
+            };
+            dispatch(CreateNotification(obj));
             setpostdata({
               desc: "",
               files: [],
@@ -77,20 +88,19 @@ const CreateNewpost = () => {
     [postdata, file]
   );
 
-  // close picker if we close outside of it 
-  useEffect(()=>{
-    const handleOutside=(event)=>{
-      if(pickerRef.current && !pickerRef.current.contains(event.target)){
-        setshowEmoji(false)
+  // close picker if we close outside of it
+  useEffect(() => {
+    const handleOutside = (event) => {
+      if (pickerRef.current && !pickerRef.current.contains(event.target)) {
+        setshowEmoji(false);
       }
-    }
+    };
 
-    document.addEventListener("mousedown",handleOutside);
-    return ()=>{
-      document.removeEventListener("mousedown",handleOutside)
-    }
-
-  },[])
+    document.addEventListener("mousedown", handleOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -192,7 +202,10 @@ const CreateNewpost = () => {
                 </button>
 
                 {showemoji && (
-                  <div ref={pickerRef}  className="absolute top-7 w-full z-[999]">
+                  <div
+                    ref={pickerRef}
+                    className="absolute top-7 w-full z-[999]"
+                  >
                     <Picker
                       data={data}
                       className="z-[999]"

@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/dialog";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import { UpdateAllpostdata } from "@/redux/Slice/PostSlice";
 
 const CreatePostModal = () => {
   const [showemoji, setshowEmoji] = useState(false);
@@ -68,6 +69,7 @@ const CreatePostModal = () => {
             toast.success(res.message);
             console.log(res);
             dispatch(CreatePostNoupdate(res.userupdated));
+            dispatch(UpdateAllpostdata([res.CreatePost]));
             setpostdata({
               desc: "",
               files: [],
@@ -99,10 +101,10 @@ const CreatePostModal = () => {
   return (
     <>
       <Dialog>
-        <DialogTrigger >
+        <DialogTrigger>
           <FaPlus size={25} />
         </DialogTrigger>
-        <DialogContent className=" p-0 py-2  h-screen sm:h-1/2  ">
+        <DialogContent className=" p-0 py-5  h-screen   ">
           <DialogHeader>
             <DialogTitle>Create Your post </DialogTitle>
           </DialogHeader>
@@ -123,14 +125,14 @@ const CreatePostModal = () => {
 
             {/* Selected Media Preview */}
             <div
-              className={`  p-1 mt-2 flex items-center h-1/2    bg-red-400 justify-center   ${
+              className={`  p-1 mt-2 flex items-center h-1/2    justify-center   ${
                 file?.length > 0 ? "block" : "hidden"
               } `}
             >
               {file[0]?.type === "video/mp4" ? (
                 <video
                   ref={videoref}
-                  className="rounded-md overflow-hidden w-full  object-contain"
+                  className="rounded-md h-full  overflow-hidden w-full  object-contain"
                   src={
                     file
                       ? URL?.createObjectURL(file[0])
@@ -175,12 +177,12 @@ const CreatePostModal = () => {
             {/* Upload Image/Video Section */}
             <div className={` flex items-center justify-between  `}>
               <div className=" flex gap-3 items-center  cursor-pointer relative ">
-                <button
+                <span
                   className="cmn-file"
                   onClick={() => fileref.current.click()}
                 >
                   <ImAttachment className="cmn-text" />
-                </button>
+                </span>
 
                 <input
                   name="files"

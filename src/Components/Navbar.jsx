@@ -26,6 +26,7 @@ import { IoMdMenu, IoMdNotificationsOutline } from "react-icons/io";
 import MobileMenu from "./MobileMenu";
 import ProfileMenuDropDown from "./ProfileMenuDropDown";
 import { Apicall, Base_Url } from "../../constant";
+import { GetNotification } from "@/redux/Slice/NotificationApi";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -35,16 +36,18 @@ const Navbar = () => {
   const [openMobileMenu, setopenMobileMenu] = useState(false);
 
   const token = localStorage.getItem("auth-token");
+  const loginuserid=localStorage.getItem("userid");
   const Navigate = useNavigate();
 
   const { getuserstatus, userdata, getalluserstatus, logoutstatus } =
     useSelector((state) => state.user);
-  console.log(userdata);
+//  get notification data 
+const {getnotstatus}=useSelector((state)=>state.notification)
 
   //  functionality for infinite scrolling
   //  state of for page valkue
   const [pagevalue, setpagevalue] = useState(1);
-  console.log(pagevalue);
+
 
   const handleScroll = () => {
     console.log(
@@ -90,7 +93,7 @@ const Navbar = () => {
   }, [
     getuserstatus,
     getalluserstatus,
-    getalluserstatus,
+
     pagevalue,
     token,
     dispatch,
@@ -100,8 +103,19 @@ const Navbar = () => {
   useEffect(() => {
     if (token !== null) {
       dispatch(Getallpostdata(pagevalue));
+
     }
   }, [pagevalue]);
+
+  // method to get notification for a post 
+  useEffect(()=>{
+
+    if(getnotstatus==="idle"){
+      dispatch(GetNotification(loginuserid))
+    }
+
+
+  },[loginuserid,getnotstatus])
 
   // useffect for google authentication
   useEffect(() => {
@@ -162,19 +176,20 @@ const Navbar = () => {
               </div>
 
               <button
-                onClick={() => setopenMobileMenu(true)}
+                // onClick={() => setopenMobileMenu(true)}
                 className="lg:hidden flex items-center bg-[#c0bcbccc] "
               >
-                <IoMdMenu size={35} />
+                {/* <IoMdMenu size={35} /> */}
+                <MobileMenu/>
               </button>
             </div>
           </div>
         </nav>
       </header>
-      <MobileMenu
-        setopenMobileMenu={setopenMobileMenu}
-        openMobileMenu={openMobileMenu}
-      />
+      {/* <MobileMenu
+        // setopenMobileMenu={setopenMobileMenu}
+        // openMobileMenu={openMobileMenu}
+      /> */}
     </>
   );
 };

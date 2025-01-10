@@ -50,19 +50,21 @@ const UserSlice = createSlice({
       state.getAlluserdata = [...state.getAlluserdata, action.payload];
     },
     CreatePostNoupdate: (state, action) => {
-      const postnoupdate = [...state.userdata?.post, action.payload];
+      // const postnoupdate = [...state.userdata?.post, action.payload];
 
-      state.userdata = { ...state.singleuserdata, post: postnoupdate };
+      // state.userdata = { ...state.singleuserdata, post: postnoupdate };
+      state.userdata=action.payload
     },
 
     DeletePostnoupdate: (state, action) => {
-      let postnoupdate = JSON.parse(JSON.stringify(state.singleuserdata.post));
+      // let postnoupdate = JSON.parse(JSON.stringify(state.singleuserdata.post));
 
-      postnoupdate = postnoupdate.filter(
-        (value) => value?._id !== action.payload._id
-      );
+      // postnoupdate = postnoupdate.filter(
+      //   (value) => value?._id !== action.payload._id
+      // );
 
-      state.userdata = { ...state.singleuserdata, post: postnoupdate };
+      // state.userdata = { ...state.singleuserdata, post: postnoupdate };
+      state.userdata=action.payload;
     },
   },
   extraReducers: (builder) => {

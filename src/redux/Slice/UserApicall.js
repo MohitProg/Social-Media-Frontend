@@ -92,6 +92,7 @@ export const GetAlluser = createAsyncThunk("user/getalluser", async () => {
 });
 
 export const FollowUser = createAsyncThunk("user/follow", async (value) => {
+  console.log(value,"follow")
   try {
     const res = await Apicall.post(`/user/follow/${value?._id}`);
 
@@ -103,6 +104,7 @@ export const FollowUser = createAsyncThunk("user/follow", async (value) => {
 });
 
 export const UnFollowUser = createAsyncThunk("user/unfollow", async (value) => {
+  console.log(value,"follow")
   try {
     const res = await Apicall.delete(`/user/unfollow/${value?._id}`);
 

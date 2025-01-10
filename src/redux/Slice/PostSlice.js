@@ -5,16 +5,19 @@ import {
   Getallpostdata,
   Getuserpost,
   LikeAndDisLike,
+  ViewPost,
 } from "./PostApiSlice";
 
 const initialState = {
   Allpostdatatoviewuser: [],
   userPostdata: [],
+  singlepostdata:"",
   allpoststatus: "idle",
   userpostdatastatus: "idle",
   createpoststatus: "idle",
   deletepoststatus: "idle",
   likeanddislikestatus: "idle",
+  viewpoststatus:"idle"
 };
 const PostSlice = createSlice({
   name: "post",
@@ -26,12 +29,15 @@ const PostSlice = createSlice({
       );
       state.userPostdata = [...postdata];
     },
+
+   
+    
     //  updating a;; post data if we are following some one
     UpdateAllpostdata: (state, action) => {
       console.log(action.payload);
       state.Allpostdatatoviewuser = [
-        ...state.Allpostdatatoviewuser,
         ...action.payload,
+        ...state.Allpostdatatoviewuser,
       ];
     },
     //  updating all post data if we are unfollow any user
@@ -161,6 +167,25 @@ const PostSlice = createSlice({
       })
       .addCase(LikeAndDisLike.rejected, (state, action) => {
         state.likeanddislikestatus = "rejected";
+      });
+
+
+
+     // viewpost single post  
+      builder
+      .addCase(ViewPost.pending, (state, action) => {
+        state.viewpoststatus = "pending";
+      })
+      .addCase(ViewPost.fulfilled, (state, action) => {
+        state.viewpoststatus = "fulfilled";
+
+        const { postdata, success } = action.payload;
+        if (success) {
+          state.singlepostdata = postdata;
+        }
+      })
+      .addCase(ViewPost.rejected, (state, action) => {
+        state.viewpoststatus = "rejected";
       });
   },
 });

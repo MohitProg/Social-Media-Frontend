@@ -21,15 +21,14 @@ const Home = () => {
     (state) => state.post
   );
 
-
-  console.log(allpoststatus)
+  console.log(allpoststatus);
   return (
     <>
       {/* <!-- Home Page Layout --> */}
-      <div className="cmn-bg min-h-screen  relative  w-full sm:w-[90%] mx-auto   sm:p-5">
-        <div className="  grid grid-cols-1 lg:grid-cols-3  gap-8">
+      <div className="cmn-bg min-h-screen  relative   w-full sm:w-[70%] mx-auto   sm:p-5">
+        <div className="  grid grid-cols-1 lg:grid-cols-3    gap-8">
           {/* <!-- Main Content (Posts Feed) --> */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 ">
             <div className="hidden sm:block">
               <CreateNewpost />
             </div>
@@ -41,29 +40,25 @@ const Home = () => {
             {/* <!-- Posts Feed --> */}
 
             {allpoststatus === "pending" ? (
-              <div className="flex w-full  h-screen items-center  justify-center  ">
+              <div className="flex w-full h-screen items-center justify-center">
                 <ClipLoader />
               </div>
-            ) : <>
-                <div className="flex flex-col gap-4">
-                  {Allpostdatatoviewuser &&
-                    Allpostdatatoviewuser?.length > 0 &&
-                    Allpostdatatoviewuser?.map((value) => (
-                      <Newpost key={value?._id} value={value} />
-                    ))}
-                </div>
-              </> ? (
-              <div className="flex flex-col gap-1 bg-white rounded-lg items-center justify-center h-screen w-full">
-                <h1 className="cmn-text">NO Post Available &#128532; </h1>
-                <p className="cmn-text text-sm">Please follow some user</p>
+            ) : Allpostdatatoviewuser?.length > 0 ? (
+              <div className="flex flex-col gap-4 ">
+                {Allpostdatatoviewuser.map((value) => (
+                  <Newpost key={value?._id} value={value} />
+                ))}
               </div>
             ) : (
-              ""
+              <div className="flex flex-col gap-1 bg-white rounded-lg items-center justify-center h-screen w-full">
+                <h1 className="cmn-text">NO Post Available &#128532;</h1>
+                <p className="cmn-text text-sm">Please follow some user</p>
+              </div>
             )}
           </div>
 
           {/* <!-- Sidebar --> */}
-          <div className="lg:col-span-1  flex flex-col gap-5">
+          <div className="lg:col-span-1  flex flex-col gap-5 ">
             {/* <!-- Suggested Users to Follow --> */}
             <div className="bg-white shadow-md rounded-lg p-6 ">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">

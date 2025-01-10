@@ -47,7 +47,7 @@ const UserListModals = ({ setfollwermodal, followermodal }) => {
           toast.success(res.message);
           console.log(res);
           // dispatch(Getallpostdata());
-          dispatch(UpdateAllpostonunfollow(res.unfollowuserpost));
+          dispatch(UpdateAllpostonunfollow(res?.unfollowuserpost));
           dispatch(AddunfollowMemberTostate(value));
         } else {
           toast.error(res.message);

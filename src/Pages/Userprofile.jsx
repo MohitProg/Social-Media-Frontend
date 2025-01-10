@@ -34,6 +34,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Newpost from "../Components/Newpost";
 import { Button } from "@/Components/ui/button";
+import { CreateNotification } from "@/redux/Slice/NotificationApi";
 // import { Avatar } from "@mui/material";
 
 const Userprofile = () => {
@@ -57,7 +58,7 @@ const Userprofile = () => {
     singleuserstatus,
   } = useSelector((state) => state.user);
 
-  console.log(singleuserdata, userdata);
+ 
   //  state for category toggle
   const [catToggle, setcatToggle] = useState({
     category: "posts",
@@ -101,7 +102,7 @@ const Userprofile = () => {
           if (res.success) {
             toast.success(res.message);
             dispatch(DeletePostdatafromstate(value));
-            dispatch(DeletePostnoupdate(value));
+            dispatch(DeletePostnoupdate(res.userUpdated));
           } else {
             toast.error(res.message);
           }
@@ -153,6 +154,7 @@ const Userprofile = () => {
         if (res.success) {
           toast.success(res.message);
           dispatch(UpdateAlluserdata(value));
+           dispatch(CreateNotification({name:userdata?.name,type:"follow",reciverid:value?._id}))
         } else {
           toast.error(res.message);
         }
@@ -175,65 +177,126 @@ const Userprofile = () => {
           <ClipLoader />
         </div>
       ) : (
-        <div className=" ">
-          {/* Profile Header */}
-          <div className="flex flex-col bg-white   rounded-md gap-2  ">
-            <div className=" flex  flex-col gap-2">
-              <div className="flex items-center flex-col  p-2 gap-2">
-                {/* Profile Picture */}
-                <div className="">
-                  <Avatar className="h-32 w-32">
-                    <AvatarImage
-                      className="object-cover"
-                      src={
-                        singleuserexist
-                          ? singleuserdata.avatar
-                          : userdata?.avatar || "https://github.com/shadcn.png"
-                      }
-                      alt="@shadcn"
-                    />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </div>
-
-                {/* Profile Info */}
-                <div className="p-2 w-full sm:w-1/2 mx-auto flex flex-col  justify-center gap-4 text-center">
+        <div className=" w-full sm:w-[80%] mx-auto mt-5">
+          <div className=" grid grid-cols-1 lg:grid-cols-3 gap-6 mx-auto">
+            {/* Profile Header */}
+            <div className=" col-span-1 rounded-md gap-2">
+              <div className="flex flex-col gap-2 bg-white w-full">
+                <div className="flex items-center flex-col p-2 gap-2">
+                  {/* Profile Picture */}
                   <div>
-                    <h2 className="text-2xl">
-                      {singleuserexist ? singleuserdata?.name : userdata?.name}
-                    </h2>
-                    <p className="cmn-text">
-                      {singleuserexist
-                        ? singleuserdata?.email
-                        : userdata?.email}
-                    </p>
+                    <Avatar className="h-32 w-32">
+                      <AvatarImage
+                        className="object-cover"
+                        src={
+                          singleuserexist
+                            ? singleuserdata.avatar
+                            : userdata?.avatar ||
+                              "https://github.com/shadcn.png"
+                        }
+                        alt="@shadcn"
+                      />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
                   </div>
-                  <div className="flex  items-center gap-10 sm:justify-center justify-around">
-                    {/* follower modal  popup */}
 
-                    <Dialog>
-                      <DialogTrigger>
-                        <strong>
-                          {singleuserexist
-                            ? singleuserdata?.followers?.length
-                            : userdata?.followers?.length || 0}
-                        </strong>{" "}
-                        Follower
-                      </DialogTrigger>
-                      <DialogContent className="p-2 py-3 h-screen sm:h-[40vh]">
-                        <DialogHeader>
-                          <DialogTitle>Followers</DialogTitle>
+                  {/* Profile Info */}
+                  <div className="p-2 w-full  mx-auto flex flex-col justify-center gap-4 text-center">
+                    <div>
+                      <h2 className="text-2xl">
+                        {singleuserexist
+                          ? singleuserdata?.name
+                          : userdata?.name}
+                      </h2>
+                      <p className="cmn-text">
+                        {singleuserexist
+                          ? singleuserdata?.email
+                          : userdata?.email}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-10 sm:justify-center justify-around">
+                      {/* follower modal popup */}
+                      <Dialog>
+                        <DialogTrigger>
+                          <strong>
+                            {singleuserexist
+                              ? singleuserdata?.followers?.length
+                              : userdata?.followers?.length || 0}
+                          </strong>{" "}
+                          Follower
+                        </DialogTrigger>
+                        <DialogContent className="p-2 py-3 h-screen sm:h-[40vh]">
+                          <DialogHeader>
+                            <DialogTitle>Followers</DialogTitle>
 
-                          <div className="py-3">
-                            {followers?.length > 0 ? (
-                              followers?.map((value) => (
+                            <div className="py-3">
+                              {followers?.length > 0 ? (
+                                followers?.map((value) => (
+                                  <div
+                                    key={value._id}
+                                    className="flex items-center justify-between mb-4 border-b-2 border-[#c0bcbccc] p-1 rounded-md py-2"
+                                  >
+                                    <Link
+                                      to={`/profile/singleuserdata/${value?._id}`}
+                                      className=""
+                                    >
+                                      <DialogClose className="flex items-center space-x-3">
+                                        <img
+                                          className="w-10 h-10 rounded-full object-cover"
+                                          src={
+                                            value?.avatar ||
+                                            "https://plus.unsplash.com/premium_photo-1681426472026-60d4bf7b69a1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Y2FydG9vbnxlbnwwfHwwfHx8MA%3D%3D"
+                                          }
+                                          alt="Suggested User"
+                                        />
+                                        <div className="text-start">
+                                          <h3 className="text-sm font-semibold text-gray-900">
+                                            {value?.name}
+                                          </h3>
+                                          <p className="text-xs text-gray-500">
+                                            {value?.email}
+                                          </p>
+                                        </div>
+                                      </DialogClose>
+                                    </Link>
+                                  </div>
+                                ))
+                              ) : (
+                                <div className="w-full flex items-center justify-center">
+                                  <h1 className="cmn-text">
+                                    No user available
+                                  </h1>
+                                </div>
+                              )}
+                            </div>
+                          </DialogHeader>
+                        </DialogContent>
+                      </Dialog>
+
+                      {/* following modal popup */}
+                      <Dialog>
+                        <DialogTrigger>
+                          <strong>
+                            {singleuserexist
+                              ? singleuserdata?.Following?.length
+                              : userdata?.Following?.length || 0}
+                          </strong>{" "}
+                          Following
+                        </DialogTrigger>
+                        <DialogContent className="h-screen sm:h-[40vh]">
+                          <DialogHeader>
+                            <DialogTitle>Following User</DialogTitle>
+                          </DialogHeader>
+
+                          <div className="py-2 h-screen">
+                            {Following?.length > 0 ? (
+                              Following?.map((value) => (
                                 <div
                                   key={value._id}
-                                  className="flex items-center justify-between mb-4  border-b-2 border-[#c0bcbccc] p-1  rounded-md py-2"
+                                  className="flex items-center justify-between mb-4 border-b-2 border-[#c0bcbccc] p-1 rounded-md py-2"
                                 >
                                   <Link
                                     to={`/profile/singleuserdata/${value?._id}`}
-                                    className=""
                                   >
                                     <DialogClose className="flex items-center space-x-3">
                                       <img
@@ -244,7 +307,7 @@ const Userprofile = () => {
                                         }
                                         alt="Suggested User"
                                       />
-                                      <div className=" text-start">
+                                      <div className="text-start">
                                         <h3 className="text-sm font-semibold text-gray-900">
                                           {value?.name}
                                         </h3>
@@ -254,170 +317,120 @@ const Userprofile = () => {
                                       </div>
                                     </DialogClose>
                                   </Link>
+
+                                  {userId == OriginalId && (
+                                    <button
+                                      onClick={() => {
+                                        Unfollowuser(value),
+                                          setuserid(value?._id);
+                                      }}
+                                      className="text-blue-600 flex items-center justify-center font-medium hover:underline"
+                                    >
+                                      {unfollowuserstatus === "pending" &&
+                                      userid === value?._id ? (
+                                        <ClipLoader
+                                          size="18px"
+                                          color="#0753ea"
+                                        />
+                                      ) : (
+                                        "Unfollow"
+                                      )}
+                                    </button>
+                                  )}
                                 </div>
                               ))
                             ) : (
-                              <div className="w-full flex items-center justify-center ">
-                                <h1 className="cmn-text">No user avialable </h1>
+                              <div className="w-full flex items-center justify-center">
+                                <h1 className="cmn-text">No user available</h1>
                               </div>
                             )}
                           </div>
-                        </DialogHeader>
-                      </DialogContent>
-                    </Dialog>
+                        </DialogContent>
+                      </Dialog>
 
-                    {/*  followiong modal popup */}
-                    <Dialog>
-                      <DialogTrigger>
-                        {" "}
-                        <strong>
-                          {singleuserexist
-                            ? singleuserdata?.Following?.length
-                            : userdata?.Following?.length || 0}
-                        </strong>{" "}
-                        Following
-                      </DialogTrigger>
-                      <DialogContent className="h-screen sm:h-[40vh]">
-                        <DialogHeader>
-                          <DialogTitle>Following User</DialogTitle>
-                        </DialogHeader>
-
-                        <div className="py-2 h-screen">
-                          {Following?.length > 0 ? (
-                            Following?.map((value) => (
-                              <div
-                                key={value._id}
-                                className="flex items-center justify-between mb-4  border-b-2 border-[#c0bcbccc] p-1  rounded-md py-2"
-                              >
-                                <Link
-                                  to={`/profile/singleuserdata/${value?._id}`}
-                                >
-                                  <DialogClose className="flex items-center space-x-3">
-                                    <img
-                                      className="w-10 h-10 rounded-full object-cover"
-                                      src={
-                                        value?.avatar ||
-                                        "https://plus.unsplash.com/premium_photo-1681426472026-60d4bf7b69a1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Y2FydG9vbnxlbnwwfHwwfHx8MA%3D%3D"
-                                      }
-                                      alt="Suggested User"
-                                    />
-                                    <div>
-                                      <h3 className="text-sm font-semibold text-gray-900">
-                                        {value?.name}
-                                      </h3>
-                                      <p className="text-xs text-gray-500">
-                                        {value?.email}
-                                      </p>
-                                    </div>
-                                  </DialogClose>
-                                </Link>
-
-                                {userId == OriginalId && (
-                                  <button
-                                    onClick={() => {
-                                      Unfollowuser(value),
-                                        setuserid(value?._id);
-                                    }}
-                                    className="text-blue-600 flex items-center justify-center font-medium hover:underline"
-                                  >
-                                    {unfollowuserstatus === "pending" &&
-                                    userid === value?._id ? (
-                                      <ClipLoader size="18px" color="#0753ea" />
-                                    ) : (
-                                      "Unfollow"
-                                    )}
-                                  </button>
-                                )}
-                              </div>
-                            ))
-                          ) : (
-                            <div className="w-full flex items-center justify-center ">
-                              <h1 className="cmn-text">No user avialable </h1>
-                            </div>
-                          )}
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-
-                    <p className="cmn-text">
-                      <strong>{userdata?.post?.length || 0}</strong> Posts
-                    </p>
-                  </div>
-                  <div className="w-full sm:w-1/2  mx-auto  cmn-text  ">
-                    {userdata?.desc}
+                      <p className="cmn-text">
+                        <strong>{userdata?.post?.length || 0}</strong> Posts
+                      </p>
+                    </div>
+                    <div className="w-full  mx-auto cmn-text">
+                      {userdata?.desc}
+                    </div>
                   </div>
                 </div>
+
+                {/* Edit Profile Button */}
+                {userId === OriginalId && (
+                  <div className="flex items-center p-3 justify-center">
+                    <EditprofileModal />
+                  </div>
+                )}
+
+                {/* adding follow and unfollow btn */}
+                {userId !== OriginalId && (
+                  <div className="px-5 flex items-center justify-center">
+                    {followstatus.bol === true &&
+                    followstatus.status === "Unfollow" ? (
+                      <Button
+                        onClick={() => Unfollowuser(singleuserdata)}
+                        className="bg-blue-500 hover:bg-blue-600"
+                      >
+                        Unfollow
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => FollowingUser(singleuserdata)}
+                        className="bg-blue-500 hover:bg-blue-600"
+                      >
+                        Follow
+                      </Button>
+                    )}
+                  </div>
+                )}
               </div>
+              {/* Profile Menu (Tabs) */}
+              <div className="bg-white shadow-md rounded-lg p-2 sm:p-4">
+                <ul className="flex items-center gap-2 cmn-text">
+                  <li
+                    onClick={() => categorySwitchwithdata("post")}
+                    className="cmn-link"
+                  >
+                    Posts
+                  </li>
 
-              {/* Edit Profile Button */}
-              {userId === OriginalId && (
-                <div className=" flex items-center  p-3 justify-center ">
-                  <EditprofileModal />
+                  <li
+                    onClick={() => categorySwitchwithdata("savedpost")}
+                    className="cmn-link"
+                  >
+                    Saved
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Profile Content */}
+            <div className="col-span-1 lg:col-span-2">
+              {userpostdatastatus == "pending" ? (
+                <div className="flex items-center justify-center h-screen">
+                  <ClipLoader />
                 </div>
-              )}
-
-              {/*  addig follow and unfollow btn  */}
-              {userId !== OriginalId && (
-                <div className="px-5  flex items-center justify-center">
-                  {followstatus.bol === true &&
-                  followstatus.status === "Unfollow" ? (
-                    <Button
-                      onClick={() => Unfollowuser(singleuserdata)}
-                      className="bg-blue-500 hover:bg-blue-600"
-                    >
-                      Unfollow
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={() => FollowingUser(singleuserdata)}
-                      className="bg-blue-500 hover:bg-blue-600"
-                    >
-                      Follow
-                    </Button>
-                  )}
+              ) : userPostdata?.length > 0 ? (
+                <div className="flex flex-col gap-2">
+                  {userPostdata.map((value) => (
+                    <Newpost
+                      value={value}
+                      key={value?._id}
+                      OriginalId={userId}
+                      handleDeletePost={handleDeletePost}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="w-full px-4 bg-white  sm:text-xl h-screen justify-center items-center flex font-semibold">
+                  No Post available..
                 </div>
               )}
             </div>
           </div>
-          {/* Profile Menu (Tabs) */}
-          <div className=" bg-white shadow-md rounded-lg p-2 sm:p-4">
-            <ul className=" flex items-center gap-2  cmn-text ">
-              <li
-                onClick={() => categorySwitchwithdata("post")}
-                className="cmn-link"
-              >
-                Posts
-              </li>
-
-              <li
-                onClick={() => categorySwitchwithdata("savedpost")}
-                className="cmn-link"
-              >
-                saved
-              </li>
-            </ul>
-          </div>
-          {/* Profile Content */}`
-          {userpostdatastatus == "pending" ? (
-            <div className="flex items-center justify-center h-screen ">
-              <ClipLoader />
-            </div>
-          ) : userPostdata?.length > 0 ? (
-            <div className="mt-6 grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3   gap-6">
-              {userPostdata.map((value) => (
-                <Newpost
-                  value={value}
-                  key={value?._id}
-                  OriginalId={userId}
-                  handleDeletePost={handleDeletePost}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="w-full px-4 sm:text-xl h-[40vh] justify-center  items-center flex  font-semibold ">
-              No Post available..
-            </div>
-          )}
         </div>
       )}
     </>

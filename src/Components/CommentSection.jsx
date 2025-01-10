@@ -26,12 +26,15 @@ import { FaRegComment } from "react-icons/fa";
 import moment from "moment";
 import { Button } from "./ui/button";
 import data from "@emoji-mart/data";
+import { CreateNotification } from "@/redux/Slice/NotificationApi";
 const CommentSection = ({ value }) => {
+  console.log(value)
     const pickerRef = useRef(null);
   const { postcommentdata, getcommentstatus } = useSelector(
     (state) => state.comment
   );
 
+  const {userdata}=useSelector((state)=>state.user)
   // console.log(postcommentdata)
   // console.log(value);
   const dispatch = useDispatch();
@@ -56,6 +59,8 @@ const CommentSection = ({ value }) => {
       .then((res) => {
         if (res.success) {
           toast.success(res.message);
+          // console.log(res)
+          dispatch(CreateNotification({name:userdata?.name,type:"comment",postid:value?._id,comment:res?.comment?.text}))
         }
       });
   };

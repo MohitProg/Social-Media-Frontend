@@ -33,12 +33,16 @@ import { MdDeleteOutline } from "react-icons/md";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import CommentSection from "./CommentSection";
 import { GetComment } from "../redux/Slice/CommentApislice";
+import { CreateNotification } from "@/redux/Slice/NotificationApi";
 
 const Newpost = ({ value, handleDeletePost, OriginalId }) => {
   const dispatch = useDispatch();
   const [likestatus, setlikestatus] = useState(false);
+  const {userdata}=useSelector((state)=>state.user)
  
+
   const userId = localStorage.getItem("userid");
+
   const videoref = useRef();
   //  get comments data
   // const { postcommentdata, getcommentstatus } = useSelector(
@@ -49,11 +53,13 @@ const Newpost = ({ value, handleDeletePost, OriginalId }) => {
     dispatch(LikeAndDisLike(postid))
       .unwrap()
       .then((res) => {
+        // send notification of like 
+        dispatch(CreateNotification({name:userdata?.name,type:"like",postid}))
+        
         setlikestatus(!likestatus);
       });
   };
 
-  
   useEffect(() => {
     const userId = localStorage.getItem("userid");
     const status = value?.likes?.some((value) => value._id === userId);
@@ -81,8 +87,7 @@ const Newpost = ({ value, handleDeletePost, OriginalId }) => {
             <Avatar>
               <AvatarImage
                 src={
-                  value?.postOwner?.avatar ||
-                  "https://github.com/shadcn.png"
+                  value?.postOwner?.avatar || "https://github.com/shadcn.png"
                 }
                 alt="@shadcn"
               />
@@ -181,16 +186,12 @@ const Newpost = ({ value, handleDeletePost, OriginalId }) => {
               <LikeListModal value={value} />
             </div>
 
-            <div
-              className="flex text-sm items-center gap-1 "
-              
-            >
+            <div className="flex text-sm items-center gap-1 ">
               <button className=" flex items-center  gap-2">
                 {/* <FaRegComment  size={20}/> */}
                 <CommentSection
                   value={value}
                   // commentstatus={commentstatus}
-                
                 />
 
                 {/* {value?.comments.length}{" "} */}
@@ -198,19 +199,13 @@ const Newpost = ({ value, handleDeletePost, OriginalId }) => {
               </button>
             </div>
 
-            <div
-              className="flex text-sm items-center gap-1 "
-             
-            >
+            <div className="flex text-sm items-center gap-1 ">
               <button className=" flex items-center  gap-2">
                 <IoBookmarkOutline size={20} />
               </button>
             </div>
 
-            <div
-              className="flex text-sm items-center gap-1 "
-              
-            >
+            <div className="flex text-sm items-center gap-1 ">
               <button className=" flex items-center  gap-2">
                 <PiShareFatBold size={20} />
               </button>
@@ -219,8 +214,6 @@ const Newpost = ({ value, handleDeletePost, OriginalId }) => {
         </div>
 
         {/*  comment section for comment  */}
-
-       
       </div>
     </>
   );

@@ -17,6 +17,7 @@ import { Toaster } from "react-hot-toast";
 import Auth from "./utils/Auth";
 
 import Otp from "./Pages/Otp";
+import SinglePost from "./Pages/SinglePost";
 
 function App() {
   const location = useLocation();
@@ -32,8 +33,9 @@ function App() {
         <Route path="*" element={<ErrorPage />} />
 
         {/* protecting route here  */}
-        <Route path="/"   element={<Auth />}>
+        <Route path="/" element={<Auth />}>
           <Route index element={<Home />} />
+          <Route path="singlepost/:id" element={<SinglePost />} />
           <Route path="profile">
             <Route path=":id" element={<Userprofile />} />
 

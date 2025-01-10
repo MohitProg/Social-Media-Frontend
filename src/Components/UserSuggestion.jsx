@@ -1,3 +1,4 @@
+import { CreateNotification } from '@/redux/Slice/NotificationApi';
 import { UpdateAllpostdata } from '@/redux/Slice/PostSlice';
 import { FollowUser } from '@/redux/Slice/UserApicall';
 import { UpdateAlluserdata } from '@/redux/Slice/UserSlice';
@@ -9,16 +10,19 @@ import { ClipLoader } from 'react-spinners';
 
 const UserSuggestion = () => {
     
-  const { getAlluserdata, getalluserstatus, followuserstatus } = useSelector(
+  const { getAlluserdata, getalluserstatus, followuserstatus,userdata } = useSelector(
     (state) => state.user
   );
 
+  console.log(userdata)
    const [userid, setuserid] = useState();
 
   const dispatch = useDispatch();
 
   const FollowingUser = useCallback(
     async (value) => {
+
+      console.log(value)
       await dispatch(FollowUser(value))
         .unwrap()
         .then((res) => {
@@ -28,6 +32,7 @@ const UserSuggestion = () => {
             // dispatch(Getallpostdata());
             dispatch(UpdateAllpostdata(res.postoffollowinguserdata));
             dispatch(UpdateAlluserdata(value));
+            dispatch(CreateNotification({name:userdata?.name,type:"follow",reciverid:value?._id}))
           } else {
             toast.error(res.message);
           }
@@ -52,6 +57,8 @@ const UserSuggestion = () => {
                       to={`/profile/singleuserdata/${value._id}`}
                       className="flex items-center space-x-3"
                     >
+                      <div  className='flex-1 flex  gap-1 items-center'>
+
                       <img
                         className="w-10 h-10 rounded-full object-cover"
                         src={
@@ -66,12 +73,13 @@ const UserSuggestion = () => {
                         </h3>
                         <p className="text-xs text-gray-500">{value?.email}</p>
                       </div>
+                      </div>
                     </Link>
                     <button
                       onClick={() => {
                         FollowingUser(value), setuserid(value?._id);
                       }}
-                      className="text-blue-600 font-medium hover:underline"
+                      className="text-blue-600 text-sm font-medium hover:underline"
                     >
                       {followuserstatus === "pending" &&
                       userid === value?._id ? (

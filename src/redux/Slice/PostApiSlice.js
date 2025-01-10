@@ -56,3 +56,12 @@ export const LikeAndDisLike = createAsyncThunk("post/lieanddislike", async (id) 
 
   return res.data;
 });
+
+
+export const ViewPost=createAsyncThunk("/post/viewpost",async(id)=>{
+  const res = await Apicall.get(`/post/viewpost/${id}`);
+  
+
+
+  return res.data;
+})
