@@ -13,15 +13,37 @@ import { UpdateAllpostdata } from "../redux/Slice/PostSlice";
 import { FaPlus } from "react-icons/fa";
 import CreatePostModal from "@/Components/CreatePostModal";
 import UserSuggestion from "@/Components/UserSuggestion";
+import { useSocketConext } from "@/Context/SocketContext";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Home = () => {
   const token = localStorage.getItem("auth-token");
+  // online user according to filter
+  const [userOnline, setUserOnline] = useState([]);
+  const { onlineuser, socket } = useSocketConext();
+  const { userStatus } = useSelector((state) => state.user);
 
   const { Allpostdatatoviewuser, allpoststatus } = useSelector(
     (state) => state.post
   );
 
-  console.log(allpoststatus);
+  const { userdata } = useSelector((state) => state.user);
+  console.log(userdata?.Following, "userdata");
+
+  useEffect(() => {
+    if (userdata?.Following && onlineuser) {
+      const user = userdata.Following.filter((value) =>
+        onlineuser.some((user) => user === value?._id)
+      );
+
+      setUserOnline(user);
+    } else {
+      setUserOnline([]);
+    }
+  }, [onlineuser, socket, userStatus, userdata]);
+
+
+
   return (
     <>
       {/* <!-- Home Page Layout --> */}
@@ -29,11 +51,23 @@ const Home = () => {
         <div className="  grid grid-cols-1 lg:grid-cols-3    gap-8">
           {/* <!-- Main Content (Posts Feed) --> */}
           <div className="lg:col-span-2 ">
+            <div className="bg-white  flex p-2 mb-2 shadow-sm rounded-lg items-center gap-2 ">
+              {userOnline?.length > 0 &&
+                userOnline?.map((value) => (
+                  <div className="flex flex-col gap-1" key={value?._id}>
+                    <Avatar className="h-14 w-14 ring-4 ring-green-600">
+                      <AvatarImage src={value?.avatar} />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <span className="text-xs"> {value?.name}</span>
+                  </div>
+                ))}
+            </div>
             <div className="hidden sm:block">
               <CreateNewpost />
             </div>
 
-            <div className="fixed sm:hidden bottom-2 right-2 p-2 flex items-center justify-center bg-[#c0bcbccc] rounded-full  ">
+            <div className="fixed sm:hidden bottom-2 right-2 p-2 z-[999] flex items-center justify-center text-white bg-[#0a0a0a9e] rounded-full  ">
               <CreatePostModal />
             </div>
 

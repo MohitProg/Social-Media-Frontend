@@ -26,7 +26,7 @@ body {
   }
 
   .cmn-text {
-    @apply text-[#3e3e41];
+    @apply text-[#3e3e41] ;
   }
 
   .cmn-input {

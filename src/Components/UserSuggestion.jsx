@@ -14,7 +14,7 @@ const UserSuggestion = () => {
     (state) => state.user
   );
 
-  console.log(userdata)
+  // console.log(userdata)
    const [userid, setuserid] = useState();
 
   const dispatch = useDispatch();
@@ -22,17 +22,17 @@ const UserSuggestion = () => {
   const FollowingUser = useCallback(
     async (value) => {
 
-      console.log(value)
+      // console.log(value)
       await dispatch(FollowUser(value))
         .unwrap()
         .then((res) => {
           if (res.success) {
-            console.log(res);
+            // console.log(res);
             toast.success(res.message);
             // dispatch(Getallpostdata());
             dispatch(UpdateAllpostdata(res.postoffollowinguserdata));
             dispatch(UpdateAlluserdata(value));
-            dispatch(CreateNotification({name:userdata?.name,type:"follow",reciverid:value?._id}))
+            dispatch(CreateNotification({name:value?.name,type:"follow",reciverid:value?._id}))
           } else {
             toast.error(res.message);
           }

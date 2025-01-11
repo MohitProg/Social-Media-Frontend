@@ -28,13 +28,13 @@ import { Button } from "./ui/button";
 import data from "@emoji-mart/data";
 import { CreateNotification } from "@/redux/Slice/NotificationApi";
 const CommentSection = ({ value }) => {
-  console.log(value)
-    const pickerRef = useRef(null);
+ 
+  const pickerRef = useRef(null);
   const { postcommentdata, getcommentstatus } = useSelector(
     (state) => state.comment
   );
 
-  const {userdata}=useSelector((state)=>state.user)
+  const { userdata } = useSelector((state) => state.user);
   // console.log(postcommentdata)
   // console.log(value);
   const dispatch = useDispatch();
@@ -60,7 +60,14 @@ const CommentSection = ({ value }) => {
         if (res.success) {
           toast.success(res.message);
           // console.log(res)
-          dispatch(CreateNotification({name:userdata?.name,type:"comment",postid:value?._id,comment:res?.comment?.text}))
+          dispatch(
+            CreateNotification({
+              name: userdata?.name,
+              type: "comment",
+              postid: value?._id,
+              comment: res?.comment?.text,
+            })
+          );
         }
       });
   };
@@ -76,7 +83,7 @@ const CommentSection = ({ value }) => {
   };
 
   // console.log(postcommentdata);
-  console.log(messagedata)
+  // console.log(messagedata);
 
   useEffect(() => {
     setmessagedata({ ...messagedata, postId: value?._id });
@@ -88,18 +95,18 @@ const CommentSection = ({ value }) => {
 
   // }, [value._id]);
 
-    useEffect(() => {
-      const HandleClickOutSide = (event) => {
-        if (pickerRef.current && !pickerRef.current.contains(event.target)) {
-          setshowEmoji(false);
-        }
-      };
-  
-      document.addEventListener("mousedown", HandleClickOutSide);
-      return () => {
-        document.removeEventListener("mousedown", HandleClickOutSide);
-      };
-    });
+  useEffect(() => {
+    const HandleClickOutSide = (event) => {
+      if (pickerRef.current && !pickerRef.current.contains(event.target)) {
+        setshowEmoji(false);
+      }
+    };
+
+    document.addEventListener("mousedown", HandleClickOutSide);
+    return () => {
+      document.removeEventListener("mousedown", HandleClickOutSide);
+    };
+  });
   const HandleShowEmoji = (e) => {
     e.preventDefault();
     setshowEmoji(!showemoji);
@@ -120,7 +127,9 @@ const CommentSection = ({ value }) => {
         </DialogTrigger>
         <DialogContent className="p-2 w-[90%] rounded-md sm:w-[100%]">
           <DialogHeader>
-            <DialogTitle>Comments On your Post</DialogTitle>
+            <DialogTitle className="text-md md:text-xl">
+              Comments On your Post
+            </DialogTitle>
           </DialogHeader>
 
           <div className="">
@@ -131,7 +140,7 @@ const CommentSection = ({ value }) => {
             ) : (
               <>
                 {/* Comments Section */}
-                <div className="sm:p-3 rounded-xl bg-white overflow-y-scroll  flex flex-col gap-2  h-[50vh]">
+                <div className="sm:p-3 rounded-xl bg-white overflow-y-scroll  flex flex-col gap-2 h-[50vh]">
                   {postcommentdata?.length > 0 ? (
                     <>
                       {postcommentdata?.map((value) => (
@@ -200,7 +209,7 @@ const CommentSection = ({ value }) => {
                               <input
                                 type="text"
                                 placeholder="Write a reply..."
-                                className="w-full px-3 py-2 placeholder:text-sm bg-gray-50 rounded-lg outline-none transition duration-200"
+                                className="cmn-input"
                               />
                               <button className="text-purple-500 hover:text-blue-500 transition duration-300">
                                 <AiOutlineSend size={20} />
@@ -212,7 +221,7 @@ const CommentSection = ({ value }) => {
                     </>
                   ) : (
                     <div className="flex items-center justify-center">
-                      <h1 className="cmn-text">No Comment Available</h1>
+                      <h1 className="cmn-text text-sm">No Comment Available</h1>
                     </div>
                   )}
                 </div>
@@ -221,7 +230,10 @@ const CommentSection = ({ value }) => {
 
             {/* Input Section */}
             <div className="w-full mt-4 flex gap-2 items-center">
-              <button className="cmn-file hidden md:block " onClick={HandleShowEmoji}>
+              <button
+                className="cmn-file hidden md:block "
+                onClick={HandleShowEmoji}
+              >
                 <BsEmojiGrin className="cmn-text " />
               </button>
 
@@ -232,7 +244,7 @@ const CommentSection = ({ value }) => {
                       data={data}
                       onEmojiSelect={(emoji) =>
                         setmessagedata({
-                        ...messagedata,
+                          ...messagedata,
                           message: messagedata?.message + emoji.native,
                         })
                       }

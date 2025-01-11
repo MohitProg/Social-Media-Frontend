@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IoMdMenu, IoMdNotificationsOutline } from "react-icons/io";
 import {
   Sheet,
@@ -14,14 +14,18 @@ import { ClipLoader } from "react-spinners";
 import moment from "moment";
 import { ReadNotification } from "@/redux/Slice/NotificationApi";
 import { Link } from "react-router-dom";
+import { useSocketConext } from "@/Context/SocketContext";
+import { UpdateNotification } from "@/redux/Slice/NotificationSlice";
+import toast from "react-hot-toast";
 
 const SideNotificationDrawer = () => {
   const dispatch = useDispatch();
+  const { socket } = useSocketConext();
   const { getnotstatus, notificationdata } = useSelector(
     (state) => state.notification
   );
 
-  console.log(notificationdata);
+  // console.log(notificationdata);
   let countfornotification = notificationdata.filter(
     (value) => value?.isRead === false
   );
@@ -31,12 +35,38 @@ const SideNotificationDrawer = () => {
       dispatch(ReadNotification(value?._id));
     } catch (error) {}
   };
+
+  useEffect(() => {
+    socket.on("sendpostNotification", (data) => {
+      toast.success(data?.message);
+      console.log(data);
+      dispatch(UpdateNotification(data));
+    });
+
+    socket.on("likenotification", (data) => {
+      toast.success(data?.message);
+      console.log(data);
+      dispatch(UpdateNotification(data));
+    });
+
+    socket.on("commentNotification", (data) => {
+      toast.success(data?.message);
+      console.log(data);
+      dispatch(UpdateNotification(data));
+    });
+
+    socket.on("follownotification", (data) => {
+      toast.success(data?.message);
+      console.log(data);
+      dispatch(UpdateNotification(data));
+    });
+  }, [socket]);
   return (
     <div>
       <Sheet>
-        <SheetTrigger className="flex items-center gap-2 justify-center">
+        <SheetTrigger className="flex  gap-2 items-center text-sm">
           {" "}
-          <div className="relative  p-1">
+          <div className="relative   text-sm">
             <IoMdNotificationsOutline size={25} />
             {countfornotification?.length > 0 && (
               <span className="bg-red-500 absolute top-0 left-0  w-4  h-4  flex items-center justify-center text-white text-xs rounded-full ">
@@ -46,7 +76,7 @@ const SideNotificationDrawer = () => {
           </div>
           Notification
         </SheetTrigger>
-        <SheetContent side={"left"} className="w-full">
+        <SheetContent side={"left"} className="w-full overflow-y-scroll">
           <SheetHeader>
             <SheetTitle>Notification</SheetTitle>
           </SheetHeader>
@@ -57,7 +87,7 @@ const SideNotificationDrawer = () => {
                 <ClipLoader />
               </div>
             ) : notificationdata?.length > 0 ? (
-              <div className="flex-col flex gap-5">
+              <div className="flex-col flex gap-5 ">
                 {notificationdata?.map((value) => (
                   <>
                     <Link to={`/singlepost/${value?.postId}`}>

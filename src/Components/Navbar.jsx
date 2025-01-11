@@ -157,11 +157,11 @@ const {getnotstatus}=useSelector((state)=>state.notification)
 
             <div className=" hidden   sm:flex-1  lg:flex  justify-end items-center space-x-6">
               <div className="  md:flex space-x-4 cmn-text sm:flex  justify-end items-center">
-                <Link to="/" className="cmn-link">
-                  <AiOutlineHome size={25} className="" /> Home
+                <Link to="/" className="cmn-link text-sm">
+                  <AiOutlineHome size={20} className="" /> Home
                 </Link>
-                <Link to="message/:id" className="cmn-link">
-                  <TbMessageCircle size={25} /> Chats
+                <Link to="message/:id" className="cmn-link text-sm">
+                  <TbMessageCircle size={20} /> Chats
                 </Link>
 
                 <Link className="cmn-link">
@@ -171,13 +171,13 @@ const {getnotstatus}=useSelector((state)=>state.notification)
             </div>
 
             <div className="  flex items-center justify-end gap-2">
-              <div className="relative   flex items-center ">
+              
                 <ProfileMenuDropDown />
-              </div>
+            
 
               <button
                 // onClick={() => setopenMobileMenu(true)}
-                className="lg:hidden flex items-center bg-[#c0bcbccc] "
+                className="lg:hidden flex items-center  "
               >
                 {/* <IoMdMenu size={35} /> */}
                 <MobileMenu/>

@@ -38,8 +38,7 @@ import { CreateNotification } from "@/redux/Slice/NotificationApi";
 const Newpost = ({ value, handleDeletePost, OriginalId }) => {
   const dispatch = useDispatch();
   const [likestatus, setlikestatus] = useState(false);
-  const {userdata}=useSelector((state)=>state.user)
- 
+  const { userdata } = useSelector((state) => state.user);
 
   const userId = localStorage.getItem("userid");
 
@@ -53,9 +52,14 @@ const Newpost = ({ value, handleDeletePost, OriginalId }) => {
     dispatch(LikeAndDisLike(postid))
       .unwrap()
       .then((res) => {
-        // send notification of like 
-        dispatch(CreateNotification({name:userdata?.name,type:"like",postid}))
-        
+        // send notification of like
+        console.log(res, "like the post ");
+        if (res?.message === "like the post ") {
+          dispatch(
+            CreateNotification({ name: userdata?.name, type: "like", postid })
+          );
+        }
+
         setlikestatus(!likestatus);
       });
   };

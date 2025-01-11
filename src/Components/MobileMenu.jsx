@@ -19,38 +19,39 @@ import SideNotificationDrawer from "./SideNotificationDrawer";
 const MobileMenu = ({ setopenMobileMenu, openMobileMenu }) => {
   return (
     <>
-      <Sheet >
-      <SheetTrigger asChild>
-        <button variant="outline"> <IoMdMenu size={35} /></button>
-      </SheetTrigger>
+      <Sheet>
+        <SheetTrigger asChild>
+          <button variant="outline">
+            {" "}
+            <IoMdMenu size={35} />
+          </button>
+        </SheetTrigger>
         <SheetContent side={"left"} className="w-[300px] sm:w-[540px] p-2">
           <SheetTitle>WebTech Blog</SheetTitle>
 
-          <div className="  flex flex-col gap-2">
-            <SheetClose>
-
+          <div className="  ">
             <Link
               to="/"
               // onClick={() => setopenMobileMenu(false)}
               className="cmn-link"
             >
-              
-              <AiOutlineHome size={25} className="" /> Home
+              <SheetClose className="flex  gap-4 px-1">
+                <AiOutlineHome size={25} className="" /> Home
+              </SheetClose>
             </Link>
-            </SheetClose>
-            <SheetClose>
 
             <Link
               // onClick={() => setopenMobileMenu(false)}
               to="message/:id"
               className="cmn-link"
             >
-              <TbMessageCircle size={25} /> Chats
+              <SheetClose className="flex  gap-4 px-1">
+                <TbMessageCircle size={25} /> Chats
+              </SheetClose>
             </Link>
-            </SheetClose>
 
             <div className="cmn-link gap-2">
-              <SideNotificationDrawer />  
+              <SideNotificationDrawer />
             </div>
           </div>
         </SheetContent>

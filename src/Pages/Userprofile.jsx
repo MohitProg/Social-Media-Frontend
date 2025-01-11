@@ -39,7 +39,7 @@ import { CreateNotification } from "@/redux/Slice/NotificationApi";
 
 const Userprofile = () => {
   const { pathname } = useLocation();
-  console.log(pathname.split("/"));
+  
   const [userid, setuserid] = useState();
   // const singleuser = pathname.split("/")[2];
   const singleuserexist = pathname.split("/")[2].includes("singleuserdata");
@@ -203,12 +203,12 @@ const Userprofile = () => {
                   {/* Profile Info */}
                   <div className="p-2 w-full  mx-auto flex flex-col justify-center gap-4 text-center">
                     <div>
-                      <h2 className="text-2xl">
+                      <h2 className=" sm:text-1xl">
                         {singleuserexist
                           ? singleuserdata?.name
                           : userdata?.name}
                       </h2>
-                      <p className="cmn-text">
+                      <p className="cmn-text text-sm md:text-base">
                         {singleuserexist
                           ? singleuserdata?.email
                           : userdata?.email}
@@ -217,7 +217,7 @@ const Userprofile = () => {
                     <div className="flex items-center gap-10 sm:justify-center justify-around">
                       {/* follower modal popup */}
                       <Dialog>
-                        <DialogTrigger>
+                        <DialogTrigger className="text-sm sm:text-md">
                           <strong>
                             {singleuserexist
                               ? singleuserdata?.followers?.length
@@ -275,7 +275,7 @@ const Userprofile = () => {
 
                       {/* following modal popup */}
                       <Dialog>
-                        <DialogTrigger>
+                        <DialogTrigger  className="text-sm sm:text-md">
                           <strong>
                             {singleuserexist
                               ? singleuserdata?.Following?.length
@@ -348,11 +348,11 @@ const Userprofile = () => {
                         </DialogContent>
                       </Dialog>
 
-                      <p className="cmn-text">
+                      <p className="cmn-text text-sm sm:text-md">
                         <strong>{userdata?.post?.length || 0}</strong> Posts
                       </p>
                     </div>
-                    <div className="w-full  mx-auto cmn-text">
+                    <div className="w-full  mx-auto text-sm cmn-text">
                       {userdata?.desc}
                     </div>
                   </div>

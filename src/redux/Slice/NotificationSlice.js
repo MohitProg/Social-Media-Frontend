@@ -11,7 +11,12 @@ const initialState = {
 const NotificationSlice = createSlice({
   name: "notification",
   initialState,
-  reducers: {},
+  reducers: {
+    UpdateNotification:(state,action)=>{
+      state.notificationdata=[action.payload,...state.notificationdata]
+
+    }
+  },
   extraReducers: (builder) => {
     // methods for get notification
     builder
@@ -61,3 +66,4 @@ const NotificationSlice = createSlice({
 
 // export {} = NotificationSlice.actions;
 export const notficationReducer= NotificationSlice.reducer
+export const  {UpdateNotification}=NotificationSlice.actions;

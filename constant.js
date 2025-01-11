@@ -1,7 +1,7 @@
 import axios from "axios";
 const token = localStorage.getItem("auth-token");
-export const Base_Url = "https://socialmediabackend-1.onrender.com";
-// export const Base_Url = "http://localhost:8000";
+// export const Base_Url = "https://socialmediabackend-1.onrender.com";
+export const Base_Url = "http://localhost:8000";
 // const url="https://social-media-backend-mocha-seven.vercel.app"
 export const Apicall = axios.create({
   baseURL: `${Base_Url}/api/v1`,
