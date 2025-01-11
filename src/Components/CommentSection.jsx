@@ -28,7 +28,6 @@ import { Button } from "./ui/button";
 import data from "@emoji-mart/data";
 import { CreateNotification } from "@/redux/Slice/NotificationApi";
 const CommentSection = ({ value }) => {
- 
   const pickerRef = useRef(null);
   const { postcommentdata, getcommentstatus } = useSelector(
     (state) => state.comment
@@ -231,7 +230,7 @@ const CommentSection = ({ value }) => {
             {/* Input Section */}
             <div className="w-full mt-4 flex gap-2 items-center">
               <button
-                className="cmn-file hidden md:block "
+                className="cmn-file hidden sm:block "
                 onClick={HandleShowEmoji}
               >
                 <BsEmojiGrin className="cmn-text " />

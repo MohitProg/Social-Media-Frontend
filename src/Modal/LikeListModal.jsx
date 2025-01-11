@@ -12,22 +12,23 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 const LikeListModal = ({ value }) => {
+  console.log(value?.likes?.slice(0,3))
   return (
     <div>
       <Dialog>
         <DialogTrigger className="flex items-center gap-2">
-          <div onClick={() => setopen(true)}>
-            <AvatarGroup max={4} total={value?.likes?.length}>
+          <div onClick={() => setopen(true)} className="flex items-center">
+           
               {value?.likes?.length > 0 &&
-                value?.likes?.map((value, index) => (
+                value?.likes?.slice(0,3).map((value, index) => (
                   <>
-                    <Avatar key={index} className="h-8 w-8">
+                    <Avatar key={index} className="h-6 w-6">
                       <AvatarImage src={value?.avatar} alt="@shadcn" />
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                   </>
                 ))}
-            </AvatarGroup>
+          
           </div>
 
           <span className="cmn-text text-xs">{value?.likes?.length} likes</span>

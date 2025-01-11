@@ -36,18 +36,17 @@ const Navbar = () => {
   const [openMobileMenu, setopenMobileMenu] = useState(false);
 
   const token = localStorage.getItem("auth-token");
-  const loginuserid=localStorage.getItem("userid");
+  const loginuserid = localStorage.getItem("userid");
   const Navigate = useNavigate();
 
   const { getuserstatus, userdata, getalluserstatus, logoutstatus } =
     useSelector((state) => state.user);
-//  get notification data 
-const {getnotstatus}=useSelector((state)=>state.notification)
+  //  get notification data
+  const { getnotstatus } = useSelector((state) => state.notification);
 
   //  functionality for infinite scrolling
   //  state of for page valkue
   const [pagevalue, setpagevalue] = useState(1);
-
 
   const handleScroll = () => {
     console.log(
@@ -90,38 +89,27 @@ const {getnotstatus}=useSelector((state)=>state.notification)
     if (getalluserstatus === "idle" && token !== null) {
       dispatch(GetAlluser());
     }
-  }, [
-    getuserstatus,
-    getalluserstatus,
-
-    pagevalue,
-    token,
-    dispatch,
-  ]);
+  }, [getuserstatus, getalluserstatus, pagevalue, token, dispatch]);
 
   // getting post data to view user
   useEffect(() => {
     if (token !== null) {
       dispatch(Getallpostdata(pagevalue));
-
     }
   }, [pagevalue]);
 
-  // method to get notification for a post 
-  useEffect(()=>{
-
-    if(getnotstatus==="idle"){
-      dispatch(GetNotification(loginuserid))
+  // method to get notification for a post
+  useEffect(() => {
+    if (getnotstatus === "idle") {
+      dispatch(GetNotification(loginuserid));
     }
-
-
-  },[loginuserid,getnotstatus])
+  }, [loginuserid, getnotstatus]);
 
   // useffect for google authentication
-  useEffect(() => {
-    if (userId !== null) {
+  useEffect( () => {
+    if (userId !== null && userId!==undefined) {
       try {
-        Apicall.post(`${Base_Url}/api/v1/user/send-token`, {
+         Apicall.post(`${Base_Url}/api/v1/user/send-token`, {
           userId: userId,
         }).then((data) => {
           console.log(data);
@@ -133,8 +121,6 @@ const {getnotstatus}=useSelector((state)=>state.notification)
       }
     }
   }, [userId]);
-
-  
 
   return (
     <>
@@ -160,7 +146,7 @@ const {getnotstatus}=useSelector((state)=>state.notification)
                 <Link to="/" className="cmn-link text-sm">
                   <AiOutlineHome size={20} className="" /> Home
                 </Link>
-                <Link to="message/:id" className="cmn-link text-sm">
+                <Link to="message/" className="cmn-link text-sm">
                   <TbMessageCircle size={20} /> Chats
                 </Link>
 
@@ -171,16 +157,14 @@ const {getnotstatus}=useSelector((state)=>state.notification)
             </div>
 
             <div className="  flex items-center justify-end gap-2">
-              
-                <ProfileMenuDropDown />
-            
+              <ProfileMenuDropDown />
 
               <button
                 // onClick={() => setopenMobileMenu(true)}
                 className="lg:hidden flex items-center  "
               >
                 {/* <IoMdMenu size={35} /> */}
-                <MobileMenu/>
+                <MobileMenu />
               </button>
             </div>
           </div>

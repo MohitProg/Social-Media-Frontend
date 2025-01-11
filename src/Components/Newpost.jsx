@@ -195,11 +195,10 @@ const Newpost = ({ value, handleDeletePost, OriginalId }) => {
                 {/* <FaRegComment  size={20}/> */}
                 <CommentSection
                   value={value}
-                  // commentstatus={commentstatus}
+             
                 />
 
-                {/* {value?.comments.length}{" "} */}
-                {/* <span className="text-xs">Comments</span> */}
+               
               </button>
             </div>
 

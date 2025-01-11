@@ -18,6 +18,7 @@ import Auth from "./utils/Auth";
 
 import Otp from "./Pages/Otp";
 import SinglePost from "./Pages/SinglePost";
+import ChatMessage from "./Pages/ChatMessage";
 
 function App() {
   const location = useLocation();
@@ -42,7 +43,10 @@ function App() {
             <Route path="singleuserdata/:id" element={<Userprofile />} />
           </Route>
 
-          <Route path="message/:id" element={<Messaging />} />
+          <Route path="message/">
+            <Route index element={<Messaging />} />
+            <Route path=":id" element={<ChatMessage />} />
+          </Route>
           <Route path="friends" element={<Friends />} />
           <Route path="setting" element={<Setting />} />
         </Route>
